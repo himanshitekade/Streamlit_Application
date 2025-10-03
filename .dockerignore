@@ -1,9 +1,6 @@
+.git
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-venv/
-.env
-*.ipynb
-*.zip
-*.tar
+*.swp
