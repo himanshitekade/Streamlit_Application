@@ -11,21 +11,20 @@ pipeline {
                 sh 'docker build -t himanshitekade/ht-streamlit-app .'
             }
         }
-        stage('Push to DockerHub') {
+        stage('Push Docker Image') {
             steps {
-                sh '''
-                    docker login -u himanshitekade -p admin@123
-                    docker push himanshitekade/ht-streamlit-app
-                '''
+                sh 'docker login -u himanshitekade -p admin@123'
+                sh 'docker push himanshitekade/ht-streamlit-app'
             }
         }
         stage('Run Docker Container') {
             steps {
-                sh '''
-                    docker rm -f ht-streamlit-container || true
-                    docker run -d --name ht-streamlit-container -p 8501:8501 himanshitekade/ht-streamlit-app
-                '''
+                sh 'docker rm -f ht-streamlit-container || true'
+                sh 'docker run -d --name ht-streamlit-container -p 8501:8501 himanshitekade/ht-streamlit-app'
             }
         }
+    }
+}
+
     }
 }
