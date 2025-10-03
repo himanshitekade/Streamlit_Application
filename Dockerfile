@@ -1,19 +1,17 @@
-FROM python:3.10-slim-bullseye
+FROM python:3.10-slim-buster
 
-WORKDIR /app
+EXPOSE 8501
 
-# Install dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
+    software-properties-common \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy and install Python packages
-COPY requirements.txt .
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+WORKDIR /app
 
-# Copy app code
-COPY . .
+COPY . /app
 
-EXPOSE 8501
+RUN pip3 install -r requirements.txt
+
 ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
