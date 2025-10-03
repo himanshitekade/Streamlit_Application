@@ -1,19 +1,33 @@
-FROM python:3.10-slim
+# Use a slim Python image
+FROM python:3.10-slim-buster
 
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Set working directory
 WORKDIR /app
 
-# Copy only requirements first for caching
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy only requirements first (for caching)
 COPY requirements.txt .
 
-# Install minimal packages needed to build Python packages
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends git && \
-    pip install --no-cache-dir -r requirements.txt && \
-    rm -rf /var/lib/apt/lists/*
+# Install Python dependencies
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
-# Copy app code
+# Copy the rest of the app code
 COPY . .
 
+# Exclude .git and other unnecessary files with .dockerignore
+# Expose the port your app will run on
 EXPOSE 8501
 
-CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Run the app
+ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+
