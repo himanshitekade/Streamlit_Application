@@ -12,3 +12,7 @@ __pycache__/
 *.log
 venv/
 .env
+.DS_Store
+.mypy_cache/
+.pytest_cache/
+.ipynb_checkpoints/
