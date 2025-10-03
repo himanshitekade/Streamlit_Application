@@ -22,7 +22,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 sh '''
-                    docker rm -f streamlit-container || true
+                    docker rm -f ht-streamlit-container || true
                     docker run -d --name ht-streamlit-container -p 8501:8501 himanshitekade/ht-streamlit-app
                 '''
             }
